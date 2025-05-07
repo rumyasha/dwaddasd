@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .models import Recipe, Rating, Comment, Favorite
-from .services.notifications import send_meal_notification
+from .services import notifications
 
 def add_recipe(request):
     if request.method == 'POST':
