@@ -1,0 +1,53 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Мой план питания</h1>
+    
+    <div class="row">
+        {% for day in meal_plans_by_date %}
+        <div class="col-md-6 col-lg-4 mb-4">
+            <div class="card">
+                <div class="card-header bg-primary text-white">
+                    <h3>{{ day.date|date:"l, d.m.Y" }}</h3>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush">
+                        {% for meal in day.meals %}
+                        <li class="list-group-item">
+                            <div class="d-flex justify-content-between align-items-center">
+                                <div>
+                                    <strong>{{ meal.get_meal_type_display }}</strong>
+                                    <div>
+                                        <a href="{% url 'recipes:recipe_detail' slug=meal.recipe.slug %}">
+                                            {{ meal.recipe.title }}
+                                        </a>
+                                    </div>
+                                </div>
+                                <div>
+                                    <a href="{% url 'recipes:remove_from_meal_plan' pk=meal.id %}" 
+                                       class="btn btn-sm btn-outline-danger">
+                                        <i class="bi bi-trash"></i>
+                                    </a>
+                                </div>
+                            </div>
+                        </li>
+                        {% empty %}
+                        <li class="list-group-item text-muted">
+                            Нет рецептов на этот день
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {% empty %}
+        <div class="col-12">
+            <div class="alert alert-info">
+                Ваш план питания пуст. <a href="{% url 'recipes:recipe_list' %}">Добавьте рецепты</a> в план питания.
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

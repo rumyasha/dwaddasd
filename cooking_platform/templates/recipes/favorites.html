@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+    <h1 class="mb-4">Мои избранные рецепты</h1>
+
+    {% if favorite_recipes %}
+    <div class="row">
+        {% for recipe in favorite_recipes %}
+        <div class="col-md-4 mb-4">
+            {% include 'recipes/partials/recipe_card.html' %}
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        У вас пока нет избранных рецептов. Найдите интересные рецепты и добавляйте их в избранное!
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,62 @@
+<div class="card h-100">
+    <!-- Ссылка на детальную страницу рецепта -->
+    <a href="{% url 'recipes:recipe_detail' slug=recipe.slug %}">
+        <!-- Изображение рецепта -->
+        <img src="{{ recipe.image.url }}" class="card-img-top" alt="{{ recipe.title }}"
+             style="height: 200px; object-fit: cover;">
+    </a>
+
+    <div class="card-body">
+        <!-- Заголовок рецепта -->
+        <h5 class="card-title">
+            <a href="{% url 'recipes:recipe_detail' slug=recipe.slug %}"
+               class="text-decoration-none text-dark">
+               {{ recipe.title }}
+            </a>
+        </h5>
+
+        <!-- Тип блюда и рейтинг -->
+        <div class="d-flex justify-content-between align-items-center mb-2">
+            <span class="badge bg-secondary">{{ recipe.get_meal_type_display }}</span>
+            <div>
+                {% if recipe.average_rating %}
+                    <!-- Звезды рейтинга -->
+                    {% for i in "12345" %}
+                        {% if forloop.counter <= recipe.average_rating %}
+                            <i class="bi bi-star-fill text-warning"></i>
+                        {% else %}
+                            <i class="bi bi-star text-warning"></i>
+                        {% endif %}
+                    {% endfor %}
+                    <small>({{ recipe.ratings.count }})</small>
+                {% else %}
+                    <small class="text-muted">Нет оценок</small>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Время приготовления и количество порций -->
+        <p class="card-text text-muted">
+            <small>
+                <i class="bi bi-clock"></i> {{ recipe.prep_time }} мин
+                <i class="bi bi-people ms-2"></i> {{ recipe.servings }} порций
+            </small>
+        </p>
+    </div>
+
+    <!-- Футер карточки (можете добавить кнопки действий) -->
+    <div class="card-footer bg-white">
+        {% if user.is_authenticated %}
+        <div class="d-flex justify-content-between">
+            <button class="btn btn-sm btn-outline-secondary toggle-favorite"
+                    data-recipe-slug="{{ recipe.slug }}">
+                <i class="bi {% if recipe in user.userprofile.favorite_recipes.all %}bi-heart-fill text-danger{% else %}bi-heart{% endif %}"></i>
+            </button>
+            <button class="btn btn-sm btn-outline-primary toggle-save"
+                    data-recipe-slug="{{ recipe.slug }}">
+                <i class="bi {% if recipe in user.userprofile.saved_recipes.all %}bi-bookmark-fill{% else %}bi-bookmark{% endif %}"></i>
+            </button>
+        </div>
+        {% endif %}
+    </div>
+</div>

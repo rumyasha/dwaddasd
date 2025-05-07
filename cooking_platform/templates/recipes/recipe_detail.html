@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>{{ recipe.title }}</h1>
+<img src="{{ recipe.image.url }}">
+
+<!-- Форма оценки -->
+<form method="post" action="{% url 'rate_recipe' recipe.id %}">
+    {% csrf_token %}
+    <select name="score">
+        <option value="1">1</option>
+        <option value="2">2</option>
+        <option value="3">3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+    </select>
+    <button type="submit">Оценить</button>
+</form>
+
+<!-- Форма комментария -->
+<form method="post" action="{% url 'add_comment' recipe.id %}">
+    {% csrf_token %}
+    <textarea name="text"></textarea>
+    <button type="submit">Отправить</button>
+</form>
+
+<!-- Список комментариев -->
+{% for comment in recipe.comments.all %}
+    <p>{{ comment.user.username }}: {{ comment.text }}</p>
+{% endfor %}
+{% endblock %}

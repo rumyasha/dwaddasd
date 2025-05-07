@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ваш план питания на {{ date }}</title>
+    <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+        .meal { margin-bottom: 20px; border-bottom: 1px solid #eee; padding-bottom: 20px; }
+        .meal:last-child { border-bottom: none; }
+        .meal-type { font-weight: bold; color: #dc3545; }
+        .recipe-title { font-size: 18px; margin: 5px 0; }
+        .footer { margin-top: 30px; text-align: center; font-size: 12px; color: #6c757d; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ваш план питания на {{ date }}</h1>
+        </div>
+
+        {% for meal_plan in meal_plans %}
+        <div class="meal">
+            <div class="meal-type">{{ meal_plan.get_meal_type_display }}</div>
+            <div class="recipe-title">{{ meal_plan.recipe.title }}</div>
+            <div class="recipe-info">
+                <span>⏱ {{ meal_plan.recipe.prep_time }} мин</span> |
+                <span>🍽 {{ meal_plan.recipe.servings }} порций</span>
+            </div>
+            <div class="recipe-link">
+                <a href="{{ site_url }}{% url 'recipes:recipe_detail' slug=meal_plan.recipe.slug %}">
+                    Открыть рецепт
+                </a>
+            </div>
+        </div>
+        {% endfor %}
+
+        <div class="footer">
+            <p>Вы получили это письмо, потому что подписаны на уведомления от Кулинарной платформы.</p>
+            <p>
+                <a href="{{ site_url }}{% url 'users:profile' %}">Настроить уведомления</a> |
+                <a href="{{ site_url }}">Перейти на сайт</a>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
